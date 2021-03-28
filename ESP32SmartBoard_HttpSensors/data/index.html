@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+
+        <title>ESP32SmartBoard HTTP Sensors</title>
+        <meta name="description" content="ESP32SmartBoard HTTP Sensors">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+        <style>
+
+            html {font-family: Arial; display: inline-block; text-align: center;}
+            h2 {font-size: 2.5rem; margin-top:5px; margin-bottom:5px;}
+            p {font-size: 3.0rem;}
+            body {max-width: 800px; margin:0px auto; padding-bottom: 25px;}
+
+        </style>
+
+    </head>
+
+
+
+
+
+    <body>
+
+        <br>
+        <h2>ESP32SmartBoard</h2>
+        <h2>- HTTP Sensors -</h2>
+        <img src="sym_home_75x75.png" hspace=100>
+        <br>
+        <br>
+        <br>
+
+        <hr>
+
+        <table border="0" cellspacing="20" style="text-align: left;">
+
+            <tr>
+                <td>
+                    <img src="sym_config_50x50.png">
+                </td>
+                <td>
+                    <h4>Board Settings &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </h4>
+                </td>
+                <td>
+                    <a href="/board_settings.html">Board Configuration Setup</a>
+                </td>
+            </tr>
+
+        </table>
+
+        <hr>
+
+        <table border="0" cellspacing="20" style="text-align: left;">
+
+            <tr>
+                <td>
+                    <img src="sym_thermometer_50x50.png">
+                </td>
+                <td>
+                    <h4>Temperature/Humidity</h4>
+                </td>
+                <td>
+                    <a href="/dht22_as_text.html">Show DHT22 Temperature/Humidity</a> (as Text)
+                    <br>
+                    <br>
+                    <a href="/dht22_as_gauge.html">Show DHT22 Temperature/Humidity</a> (as Gauge)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <img src="sym_airquality_50x50.png">
+                </td>
+                <td>
+                    <h4>CO2 Level</h4>
+                </td>
+                <td>
+                    <a href="/mhz19_as_text.html">Show MH-Z19 CO2/SensorTemperature</a> (as Text)
+                    <br>
+                    <br>
+                    <a href="/mhz19_as_gauge.html">Show MH-Z19 CO2/SensorTemperature</a> (as Gauge)
+                </td>
+            </tr>
+
+        </table>
+
+        <hr>
+
+        <table border="0" cellspacing="20" style="text-align: left;">
+
+            <tr>
+                <td>
+                    <img src="sym_button_blue_75x50.png">
+                </td>
+                <td>
+                    <h4>Direct Input Key</h4>
+                </td>
+                <td>
+                    <a href="/board_input_keys.html">Get KEYs</a>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <img src="sym_led_red_75x50.png">
+                </td>
+                <td>
+                    <h4>Direct Output LED</h4>
+                </td>
+                <td>
+                    <a href="/board_output_leds.html">Set LED Bar</a>
+                </td>
+            </tr>
+
+        </table>
+
+        <hr>
+
+        <br>
+        <p style="font-size:x-small;">Server Firmware Version: %VERSION_INFO% </p>
+        <br>
+
+    </body>
+
+</html>
+

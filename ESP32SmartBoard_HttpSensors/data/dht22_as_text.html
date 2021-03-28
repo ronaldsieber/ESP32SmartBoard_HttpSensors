@@ -1,0 +1,160 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+
+        <title>DHT22 Temperature / Humidity</title>
+        <meta name="description" content="DHT22 Temperature / Humidity">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+        <style>
+
+            html {font-family: Arial; display: inline-block; margin: 0px auto; text-align: center;}
+            h2 {font-size: 2.5rem; margin-top:5px; margin-bottom:5px;}
+            p {font-size: 3.0rem;}
+
+            .units
+            {
+                font-size: 1.2rem;
+            }
+
+            .dht-labels
+            {
+                font-size: 1.5rem;
+                vertical-align:middle;
+                padding-bottom: 15px;
+            }
+
+        </style>
+
+    </head>
+
+
+
+
+
+    <body onload="FunPageSetup()">
+
+        <h2>DHT22 Temperature / Humidity</h2>
+        <br>
+        DHT22 Update Rate:  <span id="dht22_update_rate"></span> [sec]<br>
+        <br>
+        <p>
+            <img src="sym_thermometer_50x50.png">
+            <span class="dht-labels">Temperature:  </span>
+            <span id="dht22_temperature">%DHT22_TEMPERATURE%</span>
+            <sup class="units">&deg;C</sup>
+        </p>
+        <br>
+        <p>
+            <img src="sym_humidity_50x50.png">
+            <span class="dht-labels">Humidity:  </span>
+            <span id="dht22_humidity">%DHT22_HUMIDITY%</span>
+            <sup class="units">&percnt;</sup>
+        </p>
+
+        <br>
+        <br>
+        <br>
+
+        <div style="font-size:14px; text-indent:2em;">
+            <img src="sym_back_25x20.png" hspace=10>
+            <a href="/index.html">Back to Main Page</a>
+        </div>
+
+    </body>
+
+
+
+
+
+    <script>
+
+        const DHT22_UPDATE_RATE = 10000;
+
+        //-------------------------------------------------------------------
+        function FunPageSetup()
+        {
+
+            // window.alert("FunPageSetup()");
+
+            document.getElementById("dht22_update_rate").innerHTML = DHT22_UPDATE_RATE / 1000;     // ms -> sec
+
+            var FeatureEnableState = '%DHT22_FEATURE_ENABLE_STATE%';
+            if (FeatureEnableState != '1')
+            {
+                window.alert("WARNING: This Feature is not Enabled in the Server Runtime Configuration");
+            }
+            else
+            {
+                FunStartRequestTimer();
+            }
+        }
+
+        //-------------------------------------------------------------------
+        function FunStartRequestTimer()
+        {
+
+            // window.alert("FunStartRequestTimer()");
+
+            setInterval(FunTimerHandlerGetDht22Temperature, DHT22_UPDATE_RATE);
+            setInterval(FunTimerHandlerGetDht22Humidity, DHT22_UPDATE_RATE);
+        }
+
+        //-------------------------------------------------------------------
+        function FunTimerHandlerGetDht22Temperature()
+        {
+
+            // window.alert("GET /get_dht22?temperature");
+
+            var XHttpReq;
+
+            XHttpReq = new XMLHttpRequest();
+
+            XHttpReq.onreadystatechange = function()
+            {
+                if (this.readyState == 4 && this.status == 200)
+                {
+                    document.getElementById("dht22_temperature").innerHTML = this.responseText;
+                }
+            };
+
+            XHttpReq.open("GET", "/get_dht22?temperature", true);
+            XHttpReq.send();
+
+            return;
+
+        }
+
+        //-------------------------------------------------------------------
+        function FunTimerHandlerGetDht22Humidity()
+        {
+
+            // window.alert("GET /get_dht22?humidity");
+
+            var XHttpReq;
+
+            XHttpReq = new XMLHttpRequest();
+
+            XHttpReq.onreadystatechange = function()
+            {
+                if (this.readyState == 4 && this.status == 200)
+                {
+                    document.getElementById("dht22_humidity").innerHTML = this.responseText;
+                }
+            };
+
+            XHttpReq.open("GET", "/get_dht22?humidity", true);
+            XHttpReq.send();
+
+            return;
+
+        }
+
+    </script>
+
+</html>
+
+
+

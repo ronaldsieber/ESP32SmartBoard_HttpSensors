@@ -1,0 +1,158 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+
+        <title>Board Input Keys</title>
+        <meta name="description" content="Board Input Keys">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+        <style>
+
+            html {font-family: Arial; display: inline-block; margin: 0px auto; text-align: center;}
+            h2 {font-size: 2.5rem; margin-top:5px; margin-bottom:5px;}
+            p {font-size: 3.0rem;}
+
+            .units
+            {
+                font-size: 1.2rem;
+            }
+
+            .key-labels
+            {
+                font-size: 1.5rem;
+                vertical-align:middle;
+                padding-bottom: 15px;
+            }
+
+        </style>
+
+    </head>
+
+
+
+
+
+    <body onload="FunPageSetup()">
+
+        <h2>Board Input Keys</h2>
+        <br>
+        Input Update Rate:  <span id="input_update_rate"></span> [sec]<br>
+        <br>
+        <p>
+            <img src="sym_button_green_75x50.png">
+            <span class="key-labels">Input - KEY0:  </span>
+            <span id="key0">%STATE_KEY_0%</span>
+        </p>
+        <br>
+        <p>
+            <img src="sym_button_orange_75x50.png">
+            <span class="key-labels">Input - KEY1:  </span>
+            <span id="key1">%STATE_KEY_1%</span>
+        </p>
+
+        <br>
+        <br>
+        <br>
+
+        <div style="font-size:14px; text-indent:2em;">
+            <img src="sym_back_25x20.png" hspace=10>
+            <a href="/index.html">Back to Main Page</a>
+        </div>
+
+    </body>
+
+
+
+
+
+    <script>
+
+        const INPUT_KEY_UPDATE_RATE = 5000;
+
+        //-------------------------------------------------------------------
+        function FunPageSetup()
+        {
+
+            // window.alert("FunPageSetup()");
+
+            document.getElementById("input_update_rate").innerHTML = INPUT_KEY_UPDATE_RATE / 1000;     // ms -> sec
+
+            var FeatureEnableState = '%STATE_KEY_FEATURE_ENABLE%';
+            if (FeatureEnableState != '1')
+            {
+                window.alert("WARNING: This Feature is not Enabled in the Server Runtime Configuration");
+            }
+            else
+            {
+                FunStartRequestTimer();
+            }
+        }
+
+        //-------------------------------------------------------------------
+        function FunStartRequestTimer()
+        {
+
+            // window.alert("FunStartRequestTimer()");
+
+            setInterval(FunTimerHandlerGetInKey0, INPUT_KEY_UPDATE_RATE);
+            setInterval(FunTimerHandlerGetInKey1, INPUT_KEY_UPDATE_RATE);
+        }
+
+        //-------------------------------------------------------------------
+        function FunTimerHandlerGetInKey0()
+        {
+
+            // window.alert("GET /get_gpio?input=key_0");
+
+            var XHttpReq;
+
+            XHttpReq = new XMLHttpRequest();
+
+            XHttpReq.onreadystatechange = function()
+            {
+                if (this.readyState == 4 && this.status == 200)
+                {
+                    document.getElementById("key0").innerHTML = this.responseText;
+                }
+            };
+
+            XHttpReq.open("GET", "/get_input?key=key_0", true);
+            XHttpReq.send();
+
+            return;
+
+        }
+
+        //-------------------------------------------------------------------
+        function FunTimerHandlerGetInKey1()
+        {
+
+            // window.alert("GET /get_gpio?input=key_1");
+
+            var XHttpReq;
+
+            XHttpReq = new XMLHttpRequest();
+
+            XHttpReq.onreadystatechange = function()
+            {
+                if (this.readyState == 4 && this.status == 200)
+                {
+                    document.getElementById("key1").innerHTML = this.responseText;
+                }
+            };
+
+            XHttpReq.open("GET", "/get_input?key=key_1", true);
+            XHttpReq.send();
+
+            return;
+
+        }
+
+    </script>
+
+</html>
+
+
+

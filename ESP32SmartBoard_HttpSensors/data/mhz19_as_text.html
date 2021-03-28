@@ -1,0 +1,160 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+
+        <title>MH-Z19 CO2 / SensorTemperature</title>
+        <meta name="description" content="MH-Z19 CO2 / SensorTemperature">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+        <style>
+
+            html {font-family: Arial; display: inline-block; margin: 0px auto; text-align: center;}
+            h2 {font-size: 2.5rem; margin-top:5px; margin-bottom:5px;}
+            p {font-size: 3.0rem;}
+
+            .units
+            {
+                font-size: 1.2rem;
+            }
+
+            .mhz19-labels
+            {
+                font-size: 1.5rem;
+                vertical-align:middle;
+                padding-bottom: 15px;
+            }
+
+        </style>
+
+    </head>
+
+
+
+
+
+    <body onload="FunPageSetup()">
+
+        <h2>MH-Z19 CO2 / SensorTemperature</h2>
+        <br>
+        MH-Z19 Update Rate:  <span id="mhz19_update_rate"></span> [sec]<br>
+        <br>
+        <p>
+            <img src="sym_airquality_50x50.png">
+            <span class="mhz19-labels">CO2:  </span>
+            <span id="mhz19_co2">%MHZ19_CO2%</span>
+            <sup class="units">ppm</sup>
+        </p>
+        <br>
+        <p>
+            <img src="sym_thermometer_30x50.png">
+            <span class="mhz19-labels">SensorTemperature:  </span>
+            <span id="mhz19_senstemp">%MHZ19_SENSTEMP%</span>
+            <sup class="units">&deg;C</sup>
+        </p>
+
+        <br>
+        <br>
+        <br>
+
+        <div style="font-size:14px; text-indent:2em;">
+            <img src="sym_back_25x20.png" hspace=10>
+            <a href="/index.html">Back to Main Page</a>
+        </div>
+
+    </body>
+
+
+
+
+
+    <script>
+
+        const MHZ19_UPDATE_RATE = 10000;
+
+        //-------------------------------------------------------------------
+        function FunPageSetup()
+        {
+
+            // window.alert("FunPageSetup()");
+
+            document.getElementById("mhz19_update_rate").innerHTML = MHZ19_UPDATE_RATE / 1000;     // ms -> sec
+
+            var FeatureEnableState = '%MHZ19_FEATURE_ENABLE_STATE%';
+            if (FeatureEnableState != '1')
+            {
+                window.alert("WARNING: This Feature is not Enabled in the Server Runtime Configuration");
+            }
+            else
+            {
+                FunStartRequestTimer();
+            }
+        }
+
+        //-------------------------------------------------------------------
+        function FunStartRequestTimer()
+        {
+
+            // window.alert("FunStartRequestTimer()");
+
+            setInterval(FunTimerHandlerGetMhz19CO2Val, MHZ19_UPDATE_RATE);
+            setInterval(FunTimerHandlerGetMhz19SensTemp, MHZ19_UPDATE_RATE);
+        }
+
+        //-------------------------------------------------------------------
+        function FunTimerHandlerGetMhz19CO2Val()
+        {
+
+            // window.alert("GET /get_mhz19?co2");
+
+            var XHttpReq;
+
+            XHttpReq = new XMLHttpRequest();
+
+            XHttpReq.onreadystatechange = function()
+            {
+                if (this.readyState == 4 && this.status == 200)
+                {
+                    document.getElementById("mhz19_co2").innerHTML = this.responseText;
+                }
+            };
+
+            XHttpReq.open("GET", "/get_mhz19?co2", true);
+            XHttpReq.send();
+
+            return;
+
+        }
+
+        //-------------------------------------------------------------------
+        function FunTimerHandlerGetMhz19SensTemp()
+        {
+
+            // window.alert("GET /get_mhz19?senstemp");
+
+            var XHttpReq;
+
+            XHttpReq = new XMLHttpRequest();
+
+            XHttpReq.onreadystatechange = function()
+            {
+                if (this.readyState == 4 && this.status == 200)
+                {
+                    document.getElementById("mhz19_senstemp").innerHTML = this.responseText;
+                }
+            };
+
+            XHttpReq.open("GET", "/get_mhz19?senstemp", true);
+            XHttpReq.send();
+
+            return;
+
+        }
+
+    </script>
+
+</html>
+
+
+

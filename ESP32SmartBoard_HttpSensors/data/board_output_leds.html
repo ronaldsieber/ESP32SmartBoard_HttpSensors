@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+
+        <title>Board Output LEDs</title>
+        <meta name="description" content="Board Output LEDs">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="data:,">
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+        <style>
+
+            html {font-family: Arial; display: inline-block; text-align: center;}
+            h2 {font-size: 2.5rem; margin-top:5px; margin-bottom:5px;}
+            h4 {margin-top:5px; margin-bottom:5px;}
+            p {font-size: 3.0rem;}
+            body { max-width: 800px; margin: 0px auto; padding-bottom: 25px;}
+
+            .switch label
+            {
+                position: relative;
+                display: inline-block;
+                width: 120px;
+                height: 50px;
+            }
+
+            .switch input
+            {
+                display: none;
+            }
+
+            .switch .slider
+            {
+                /* floor space */
+                position: absolute;
+                cursor: pointer;
+                top: 1.5em;
+                left: 2em;
+                width: 4em;
+                height: 2em;
+                transition: all .3s ease-in-out;
+                border-radius: 1em;
+            }
+
+            .switch .slider:before
+            {
+                /* moveable slider */
+                position: absolute;
+                content: "";
+                height: 1.6em;
+                width: 1.6em;
+                left: 0.2em;
+                bottom: 0.2em;
+                background-color: white;
+                border-radius: 20px;
+                transition: all .3s ease-in-out;
+            }
+
+            .switch input:checked + .slider:before
+            {
+                /* Android 4 */
+                -webkit-transform: translateX(1.9em);
+                /* IE9 */
+                -ms-transform: translateX(1.9em);
+                transform: translateX(1.9em);
+            }
+
+            /*--------------------------------------------*/
+            #tbgreen
+            {
+                /* green */
+                background-color: #80A080;
+            }
+
+            .switch input:checked + #tbgreen
+            {
+                /* green */
+                background-color: #00FF00;
+            }
+
+            /*--------------------------------------------*/
+            #tbyellow
+            {
+                /* yellow */
+                background-color: #E0E080;
+            }
+
+            .switch input:checked + #tbyellow
+            {
+                /* yellow */
+                background-color: #FFE010;
+            }
+
+            /*--------------------------------------------*/
+            #tbred
+            {
+                /* red (maroon) */
+                background-color: #A08080;
+            }
+
+            .switch input:checked + #tbred
+            {
+                /* red */
+                background-color: #FF0000;
+            }
+
+            /*--------------------------------------------*/
+            #tbblue
+            {
+                /* blue */
+                background-color: #8080A0;
+            }
+
+            .switch input:checked + #tbblue
+            {
+                /* blue */
+                background-color: #0000FF;
+            }
+
+        </style>
+
+    </head>
+
+
+
+
+
+    <body onload="FunPageSetup()">
+
+        <h2>Board Output LEDs</h2>
+
+        <br>
+        <br>
+
+        <h4>Output - LEDs Green</h4>
+        <div class="switch text">
+            <label>
+                <input type="checkbox" onchange="FunToggleSlider(this)" id="led_green" %STATE_LEDS_GREEN% >
+                <span class="slider" id="tbgreen"/></span>
+            </label>
+        </div>
+
+        <br>
+        <br>
+        <br>
+
+        <h4>Output - LEDs Yellow</h4>
+        <div class="switch text">
+            <label>
+                <input type="checkbox" onchange="FunToggleSlider(this)" id="led_yellow" %STATE_LEDS_YELLOW% >
+                <span class="slider" id="tbyellow"/></span>
+            </label>
+        </div>
+
+        <br>
+        <br>
+        <br>
+
+        <h4>Output - LEDs Red</h4>
+        <div class="switch text">
+            <label>
+                <input type="checkbox" onchange="FunToggleSlider(this)" id="led_red" %STATE_LEDS_RED% >
+                <span class="slider" id="tbred" /></span>
+            </label>
+        </div>
+
+        <br>
+        <br>
+        <br>
+
+        <div style="font-size:14px; text-indent:2em;">
+            <img src="sym_back_25x20.png" hspace=10>
+            <a href="/index.html">Back to Main Page</a>
+        </div>
+
+    </body>
+
+
+
+
+
+    <script>
+
+        //-------------------------------------------------------------------
+        function FunPageSetup()
+        {
+
+            // window.alert("FunPageSetup()");
+
+            var FeatureEnableState = '%STATE_LEDS_FEATURE_ENABLE%';
+            if (FeatureEnableState != '1')
+            {
+                window.alert("WARNING: This Feature is not Enabled in the Server Runtime Configuration");
+            }
+        }
+
+        //-------------------------------------------------------------------
+        function FunToggleSlider(HtmlElement_p)
+        {
+
+            var XHttpReq;
+            var Value;
+
+            if ( HtmlElement_p.checked )
+            {
+                Value = "1";
+            }
+            else
+            {
+                Value = "0";
+            }
+
+            XHttpReq = new XMLHttpRequest();
+            XHttpReq.open("POST", "/set_output?led=" + HtmlElement_p.id + "&state=" + Value, true);
+            XHttpReq.send();
+
+            return;
+
+        }
+
+    </script>
+
+
+</html>
+

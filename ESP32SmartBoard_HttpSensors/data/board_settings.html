@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+
+        <title>Board Settings</title>
+        <meta name="description" content="Board Settings">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+        <style>
+
+            html {font-family: Arial; display: inline-block; text-align: left;}
+            h2 {font-size:2.5rem; text-indent:0.7em; margin-top:5px; margin-bottom:5px;}
+            p {font-size:3.0rem;}
+            body {max-width:800px; margin:0px auto; padding-bottom:25px;}
+
+            .switch label
+            {
+                position: relative;
+                display: inline-block;
+                width: 120px;
+                height: 50px;
+            }
+
+            .switch input
+            {
+                display: none;
+            }
+
+            .switch .slider
+            {
+                /* floor space */
+                position: absolute;
+                cursor: pointer;
+                top: 1.5em;
+                left: 2em;
+                width: 4em;
+                height: 2em;
+                transition: all .3s ease-in-out;
+                border-radius: 1em;
+            }
+
+            .switch .slider:before
+            {
+                /* moveable slider */
+                position: absolute;
+                content: "";
+                height: 1.6em;
+                width: 1.6em;
+                left: 0.2em;
+                bottom: 0.2em;
+                background-color: white;
+                border-radius: 20px;
+                transition: all .3s ease-in-out;
+            }
+
+            .switch input:checked + .slider:before
+            {
+                /* Android 4 */
+                -webkit-transform: translateX(1.9em);
+                /* IE9 */
+                -ms-transform: translateX(1.9em);
+                transform: translateX(1.9em);
+            }
+
+            /*--------------------------------------------*/
+            #tbgrey
+            {
+                /* grey */
+                background-color: #C0C0C0;
+            }
+
+            .switch input:checked + #tbgrey
+            {
+                /* grey */
+                background-color: #808080;
+            }
+
+            /*--------------------------------------------*/
+            #tbgreygreen
+            {
+                /* grey */
+                background-color: #C0C0C0;
+            }
+
+            .switch input:checked + #tbgreygreen
+            {
+                /* green */
+                background-color: #00CC66;
+            }
+
+            /*--------------------------------------------*/
+            #tbgreyorange
+            {
+                /* grey */
+                background-color: #C0C0C0;
+            }
+
+            .switch input:checked + #tbgreyorange
+            {
+                /* orange */
+                background-color: #FF6633;
+            }
+
+            /*--------------------------------------------*/
+            #tbgreyred
+            {
+                /* grey */
+                background-color: #C0C0C0;
+            }
+
+            .switch input:checked + #tbgreyred
+            {
+                /* red */
+                background-color: #FF3333;
+            }
+
+            /*--------------------------------------------*/
+            #tbgreyblue
+            {
+                /* grey */
+                background-color: #C0C0C0;
+            }
+
+            .switch input:checked + #tbgreyblue
+            {
+                /* blue */
+                background-color: #0099FF;
+            }
+
+        </style>
+
+    </head>
+
+
+
+
+
+    <body onload="FunPageSetup()">
+
+        <h2>Board Settings <img src="sym_config_75x75.png" hspace=100></h2>
+
+        <br>
+        <br>
+
+        <div style="font-size:28px;text-indent:1.2em;"><b>ESP32 on-board LED</b> (blue)</div>
+
+        <div class="switch text">
+            <label>
+                <input type="checkbox" id="sysled_heartbeat" onchange="FunSliderSysLedHeartbeat(this)">
+                <span class="slider" id="tbgreyblue"/></span>
+            </label>
+            <span style="font-size:24px">System Heartbeat</span>
+        </div>
+
+        <br>
+        <br>
+        <br>
+        <br>
+
+        <div style="font-size:28px;text-indent:1.2em;"><b>LED Bar Indicator</b> (green/yellow/red)</div>
+
+        <form name="FormLedBarModeSelect">
+            <div class="switch text">
+                <label>
+                    <input type="checkbox" id="ledbar_dht22_temperature" onchange="FunRadioGroupLedBar(this)">
+                    <span class="slider" id="tbgreyorange"/></span>
+                </label>
+                <span style="font-size:24px;">DHT22 - Temperature</span>
+                <br>
+                <label>
+                    <input type="checkbox" id="ledbar_dht22_humidity" onchange="FunRadioGroupLedBar(this)">
+                    <span class="slider" id="tbgreyorange"/></span>
+                </label>
+                <span style="font-size:24px">DHT22 - Humidity</span>
+                <br>
+                <label>
+                    <input type="checkbox" id="ledbar_mhz19_co2_level" onchange="FunRadioGroupLedBar(this)">
+                    <span class="slider" id="tbgreyorange"/></span>
+                </label>
+                <span style="font-size:24px">MH-Z19 - CO2 Level</span>
+            </div>
+        </form>
+
+        <br>
+        <br>
+        <br>
+        <br>
+
+        <div style="font-size:28px;text-indent:1.2em;"><b>Serial Console</b> (Serial Monitor)</div>
+
+        <div class="switch text">
+            <label>
+                <input type="checkbox" id="print_sensor_values" onchange="FunSliderPrintSensorValues(this)">
+                <span class="slider" id="tbgreygreen"/></span>
+            </label>
+            <span style="font-size:24px">Print Sensor Values</span>
+        </div>
+
+        <br>
+        <br>
+        <br>
+        <br>
+
+        <div style="font-size:14px; text-indent:2em;">
+            <img src="sym_back_25x20.png" hspace=10>
+            <a href="/index.html">Back to Main Page</a>
+        </div>
+
+    </body>
+
+
+
+
+
+    <script>
+
+        //-------------------------------------------------------------------
+        function FunPageSetup()
+        {
+
+            // window.alert("FunPageSetup()");
+
+            var Setting_Heartbeat = '%SETTING_HEARTBEAT%';
+            var Setting_LedBarIndicator = '%SETTING_LED_BAR_INDICATOR%';
+            var Setting_PrintSensorValues = '%SETTING_PRINT_SENSOR_VALUES%';
+            var HtmlElement;
+
+            if (Setting_Heartbeat == '1')
+            {
+                HtmlElement = document.getElementById("sysled_heartbeat");
+                HtmlElement.checked = 1;
+            }
+
+            if (Setting_LedBarIndicator != '')
+            {
+                HtmlElement = document.getElementById(Setting_LedBarIndicator);
+                if ( HtmlElement )
+                {
+                    HtmlElement.checked = 1;
+                }
+            }
+
+            if (Setting_PrintSensorValues == '1')
+            {
+                HtmlElement = document.getElementById("print_sensor_values");
+                HtmlElement.checked = 1;
+            }
+
+            return;
+
+        }
+
+        //-------------------------------------------------------------------
+        function FunRadioGroupLedBar(HtmlElement_p)
+        {
+
+            // window.alert(HtmlElement_p.id);
+
+            var lstFormElements;
+            var FormElement;
+            var strNodeName;
+            var iIdx;
+
+            lstFormElements = FormLedBarModeSelect.getElementsByTagName("*");
+            for (iIdx=0; iIdx<lstFormElements.length; iIdx++)
+            {
+                FormElement = lstFormElements[iIdx];
+                if (FormElement.id)
+                {
+                    strNodeName = FormElement.nodeName.toLowerCase();
+                    if (strNodeName == "input")
+                    {
+                        if (FormElement.id == HtmlElement_p.id)
+                        {
+                            FunSendConfigValue(HtmlElement_p);
+                        }
+                        else
+                        {
+                            FormElement.checked = 0;
+                        }
+                    }
+                }
+            }
+
+            return;
+
+        }
+
+        //-------------------------------------------------------------------
+        function FunSliderSysLedHeartbeat(HtmlElement_p)
+        {
+
+            FunSendConfigValue(HtmlElement_p);
+            return;
+
+        }
+
+        //-------------------------------------------------------------------
+        function FunSliderPrintSensorValues(HtmlElement_p)
+        {
+
+            FunSendConfigValue(HtmlElement_p);
+            return;
+
+        }
+
+        //-------------------------------------------------------------------
+        function FunSendConfigValue(HtmlElement_p)
+        {
+
+            var XHttpReq;
+            var Value;
+
+            if ( HtmlElement_p.checked )
+            {
+                Value = "1";
+            }
+            else
+            {
+                Value = "0";
+            }
+
+            XHttpReq = new XMLHttpRequest();
+            XHttpReq.open("POST", "/settings?option=" + HtmlElement_p.id + "&value=" + Value, true);
+            XHttpReq.send();
+
+            return;
+
+        }
+
+    </script>
+
+</html>
+

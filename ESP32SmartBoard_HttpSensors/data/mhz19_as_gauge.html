@@ -1,0 +1,184 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+
+        <title>MH-Z19 CO2 / SensorTemperature</title>
+        <meta name="description" content="MH-Z19 CO2 / SensorTemperature">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+        <style>
+
+            html {font-family: Arial; display: inline-block; margin: 0px auto; text-align: center;}
+            h2 {font-size: 2.5rem; margin-top:5px; margin-bottom:5px;}
+            p {font-size: 3.0rem;}
+
+            canvas
+            {
+                padding: 50px;
+            }
+
+            .units
+            {
+                font-size: 1.2rem;
+            }
+
+            .mhz19-labels
+            {
+                font-size: 1.5rem;
+                vertical-align:middle;
+                padding-bottom: 15px;
+            }
+
+        </style>
+
+    </head>
+
+
+
+
+
+    <body onload="FunPageSetup()">
+
+        <h2>MH-Z19 CO2 / SensorTemperature</h2>
+        <br>
+        MH-Z19 Update Rate:  <span id="mhz19_update_rate"></span> [sec]<br>
+        <br>
+
+        <canvas id="mhz19_co2"
+                data-width='400'
+                data-height='400'
+                data-type='radial-gauge'
+                data-title='CO2'
+                data-units='ppm'
+                data-min-value="0"
+                data-max-value="5000"
+                data-major-ticks="0,500,1000,1500,2000,2500,3000,3500,4000,4500,5000"
+                data-highlights='[ {"from": 0, "to": 1000, "color": "green"}, {"from": 1000, "to": 2000, "color": "yellow"}, {"from": 2000, "to": 5000, "color": "darkred"} ]'
+                data-value='%MHZ19_CO2%'>
+        </canvas>
+
+        <canvas id="mhz19_senstemp"
+                data-width='200'
+                data-height='400'
+                data-type='linear-gauge'
+                data-border-radius="20"
+                data-borders="10"
+                data-bar-begin-circle="false"
+                data-title='Sensor Temp'
+                data-units='&#8451;'
+                data-min-value="0"
+                data-max-value="100"
+                data-highlights='[ {"from": 60, "to": 100, "color": "rgba(200, 50, 50, .75)"} ]'
+                data-color-plate="#fff"
+                data-needle-type="arrow"
+                data-value='%MHZ19_SENSTEMP%'>
+        </canvas>
+
+        <br>
+        <br>
+        <br>
+
+        <div style="font-size:14px; text-indent:2em;">
+            <img src="sym_back_25x20.png" hspace=10>
+            <a href="/index.html">Back to Main Page</a>
+        </div>
+
+    </body>
+
+
+
+
+
+    <script src="gauge.min.js"></script>
+
+    <script>
+
+        const MHZ19_UPDATE_RATE = 10000;
+
+        //-------------------------------------------------------------------
+        function FunPageSetup()
+        {
+
+            // window.alert("FunPageSetup()");
+
+            document.getElementById("mhz19_update_rate").innerHTML = MHZ19_UPDATE_RATE / 1000;     // ms -> sec
+
+            var FeatureEnableState = '%MHZ19_FEATURE_ENABLE_STATE%';
+            if (FeatureEnableState != '1')
+            {
+                window.alert("WARNING: This Feature is not Enabled in the Server Runtime Configuration");
+            }
+            else
+            {
+                FunStartRequestTimer();
+            }
+        }
+
+        //-------------------------------------------------------------------
+        function FunStartRequestTimer()
+        {
+
+            // window.alert("FunStartRequestTimer()");
+
+            setInterval(FunTimerHandlerGetMhz19CO2Val, MHZ19_UPDATE_RATE);
+            setInterval(FunTimerHandlerGetMhz19SensTemp, MHZ19_UPDATE_RATE);
+        }
+
+        //-------------------------------------------------------------------
+        function FunTimerHandlerGetMhz19CO2Val()
+        {
+
+            // window.alert("GET /get_mhz19?co2");
+
+            var XHttpReq;
+
+            XHttpReq = new XMLHttpRequest();
+
+            XHttpReq.onreadystatechange = function()
+            {
+                if (this.readyState == 4 && this.status == 200)
+                {
+                    document.getElementById("mhz19_co2").setAttribute("data-value", this.responseText);
+                }
+            };
+
+            XHttpReq.open("GET", "/get_mhz19?co2", true);
+            XHttpReq.send();
+
+            return;
+
+        }
+
+        //-------------------------------------------------------------------
+        function FunTimerHandlerGetMhz19SensTemp()
+        {
+
+            // window.alert("GET /get_mhz19?senstemp");
+
+            var XHttpReq;
+
+            XHttpReq = new XMLHttpRequest();
+
+            XHttpReq.onreadystatechange = function()
+            {
+                if (this.readyState == 4 && this.status == 200)
+                {
+                    document.getElementById("mhz19_senstemp").setAttribute("data-value", this.responseText);
+                }
+            };
+
+            XHttpReq.open("GET", "/get_mhz19?senstemp", true);
+            XHttpReq.send();
+
+            return;
+
+        }
+
+    </script>
+
+</html>
+
+
+

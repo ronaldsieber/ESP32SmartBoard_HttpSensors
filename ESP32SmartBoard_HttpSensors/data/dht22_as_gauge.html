@@ -1,0 +1,184 @@
+<!DOCTYPE HTML>
+<html>
+
+    <head>
+
+        <title>DHT22 Temperature / Humidity</title>
+        <meta name="description" content="DHT22 Temperature / Humidity">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+        <style>
+
+            html {font-family: Arial; display: inline-block; margin: 0px auto; text-align: center;}
+            h2 {font-size: 2.5rem; margin-top:5px; margin-bottom:5px;}
+            p {font-size: 3.0rem;}
+
+            canvas
+            {
+                padding: 50px;
+            }
+
+            .units
+            {
+                font-size: 1.2rem;
+            }
+
+            .dht-labels
+            {
+                font-size: 1.5rem;
+                vertical-align:middle;
+                padding-bottom: 15px;
+            }
+
+        </style>
+
+    </head>
+
+
+
+
+
+    <body onload="FunPageSetup()">
+
+        <h2>DHT22 Temperature / Humidity</h2>
+        <br>
+        DHT22 Update Rate:  <span id="dht22_update_rate"></span> [sec]<br>
+        <br>
+
+        <canvas id="dht22_temperature"
+                data-width='400'
+                data-height='400'
+                data-type='radial-gauge'
+                data-title='Temperature'
+                data-units='&#8451;'
+                data-min-value="-10"
+                data-max-value="50"
+                data-major-ticks="-10,0,10,20,30,40,50"
+                data-highlights='[ {"from": -10, "to": 0, "color": "yellow"}, {"from": 10, "to": 30, "color": "green"}, {"from": 30, "to": 50, "color": "darkred"} ]'
+                data-value='%DHT22_TEMPERATURE%'>
+        </canvas>
+
+        <canvas id="dht22_humidity"
+                data-width='200'
+                data-height='400'
+                data-type='linear-gauge'
+                data-border-radius="20"
+                data-borders="10"
+                data-bar-begin-circle="false"
+                data-title='Humidity'
+                data-units='&#37;'
+                data-min-value="0"
+                data-max-value="100"
+                data-highlights='[ {"from": 70, "to": 100, "color": "rgba(200, 50, 50, .75)"} ]'
+                data-color-plate="#fff"
+                data-needle-type="arrow"
+                data-value='%DHT22_HUMIDITY%'>
+        </canvas>
+
+        <br>
+        <br>
+        <br>
+
+        <div style="font-size:14px; text-indent:2em;">
+            <img src="sym_back_25x20.png" hspace=10>
+            <a href="/index.html">Back to Main Page</a>
+        </div>
+
+    </body>
+
+
+
+
+
+    <script src="gauge.min.js"></script>
+
+    <script>
+
+        const DHT22_UPDATE_RATE = 10000;
+
+        //-------------------------------------------------------------------
+        function FunPageSetup()
+        {
+
+            // window.alert("FunPageSetup()");
+
+            document.getElementById("dht22_update_rate").innerHTML = DHT22_UPDATE_RATE / 1000;     // ms -> sec
+
+            var FeatureEnableState = '%DHT22_FEATURE_ENABLE_STATE%';
+            if (FeatureEnableState != '1')
+            {
+                window.alert("WARNING: This Feature is not Enabled in the Server Runtime Configuration");
+            }
+            else
+            {
+                FunStartRequestTimer();
+            }
+        }
+
+        //-------------------------------------------------------------------
+        function FunStartRequestTimer()
+        {
+
+            // window.alert("FunStartRequestTimer()");
+
+            setInterval(FunTimerHandlerGetDht22Temperature, DHT22_UPDATE_RATE);
+            setInterval(FunTimerHandlerGetDht22Humidity, DHT22_UPDATE_RATE);
+        }
+
+        //-------------------------------------------------------------------
+        function FunTimerHandlerGetDht22Temperature()
+        {
+
+            // window.alert("GET /get_dht22?temperature");
+
+            var XHttpReq;
+
+            XHttpReq = new XMLHttpRequest();
+
+            XHttpReq.onreadystatechange = function()
+            {
+                if (this.readyState == 4 && this.status == 200)
+                {
+                    document.getElementById("dht22_temperature").setAttribute("data-value", this.responseText);
+                }
+            };
+
+            XHttpReq.open("GET", "/get_dht22?temperature", true);
+            XHttpReq.send();
+
+            return;
+
+        }
+
+        //-------------------------------------------------------------------
+        function FunTimerHandlerGetDht22Humidity()
+        {
+
+            // window.alert("GET /get_dht22?humidity");
+
+            var XHttpReq;
+
+            XHttpReq = new XMLHttpRequest();
+
+            XHttpReq.onreadystatechange = function()
+            {
+                if (this.readyState == 4 && this.status == 200)
+                {
+                    document.getElementById("dht22_humidity").setAttribute("data-value", this.responseText);
+                }
+            };
+
+            XHttpReq.open("GET", "/get_dht22?humidity", true);
+            XHttpReq.send();
+
+            return;
+
+        }
+
+    </script>
+
+</html>
+
+
+
