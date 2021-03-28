@@ -5,11 +5,11 @@ This Arduino project enables the *ESP32SmartBoard* (see hardware project [ESP32S
 In addition to this Arduino project, the [ESP32SmartBoard_MqttSensors](https://github.com/ronaldsieber/ESP32SmartBoard_MqttSensors) project is an alternative firmware for the *ESP32SmartBoard* that realizes a functionality that is basically similar. It differs from this  project here in that it sends the values of the sensors as MQTT messages. The two projects were designed for the following different use cases:
 
  - This project - **ESP32SmartBoard_HttpSensors**:
-Easy to use, clear display of current sensor values
+Easy to use, clear display of current sensor values | 
 Stand-alone solution with Embedded WebServer, presentation of the current sensor values via HTTP pages in real time, direct access to the *ESP32SmartBoard* from devices such as PCs, laptop, tablet or smartphone
    
  - Alternative - **ESP32SmartBoard_MqttSensors**:
-More complex setup, but supports evaluation and analysis of historical data
+More complex setup, but supports evaluation and analysis of historical data | 
 Part of an overall system made up of several *ESP32SmartBoards*, each board publishes its data via MQTT to a (shared) broker, who writes the data e.g. into a database (e.g. InfluxDB), from where it can be displayed and evaluated using graphical dashboards (e.g. Grafana)
 
 ## Project Overview
