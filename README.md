@@ -116,6 +116,14 @@ In the *ESP32SmartBoard* Sketch the constant `DEFAULT_MHZ19_AUTO_CALIBRATION` is
 3. Hold down KEY0 for another 2 seconds
 4. Release KEY0
 
+**Note:** The AutoCalibration mode can lead to sudden changes in the CO2 value, especially in the first few days after powering on the sensor. After some time in 24/7 continuous operation, this effect decreases more and more.
+
+![\[CO2 Sensor AutoCalibration Discontinuity\]](Documentation/CO2Sensor_Autocalibration_Discontinuity.png)
+
+(This Grafana screenshot was taken from the the [ESP32SmartBoard_MqttSensors](https://github.com/ronaldsieber/ESP32SmartBoard_MqttSensors) project. However, the sensor routines are exactly the same in both projects.)
+
+The spontaneous discontinuities caused by the AutoCalibration mode can be avoided by manually calibrating the sensor.
+
 **(2) Manually Calibration:**
 
 Before a manual calibration, the sensor must be operated for at least 20 minutes in a stable reference environment with 400 ppm CO2. This requirement can only be approximated in the amateur and hobby area without a defined calibration environment. For this purpose, the *ESP32SmartBoard* can be operated outdoors in a shady place or inside a room near an open window, also in the shadow. In this environment, the *ESP32SmartBoard* must work for at least 20 minutes before the calibration can be triggered.
