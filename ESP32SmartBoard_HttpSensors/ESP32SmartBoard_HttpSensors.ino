@@ -308,6 +308,8 @@ bool      fResult;
     {
         Serial.println("Setup DHT22 Sensor...");
         DhtSensor_g.begin();
+        snprintf(szTextBuff, sizeof(szTextBuff), "  Sample Period:    %d [sec]", (DHT_SENSOR_SAMPLE_PERIOD / 1000));
+        Serial.println(szTextBuff);
         AppProcessDhtSensor(0, fPrintSensorValues_g);                   // get initial values
     }
 
@@ -350,6 +352,8 @@ bool      fResult;
         Serial.println(szTextBuff);
         iMhz19Param = Mhz19Sensor_g.getBackgroundCO2();
         snprintf(szTextBuff, sizeof(szTextBuff), "  Background CO2:   %d", iMhz19Param);
+        Serial.println(szTextBuff);
+        snprintf(szTextBuff, sizeof(szTextBuff), "  Sample Period:    %d [sec]", (MHZ19_SENSOR_SAMPLE_PERIOD / 1000));
         Serial.println(szTextBuff);
         AppProcessMhz19Sensor(0, fPrintSensorValues_g);                 // get initial values
     }
